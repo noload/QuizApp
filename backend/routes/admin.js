@@ -55,14 +55,36 @@ router.post("/signin", authenticateUser, async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-  const questionObj = req.body;
-
+  console.log(req.body);
   try {
-    const question = await QuestionBank.create({ ...questionObj });
+    const question = await QuestionBank.create({ ...req.body });
     console.log(question);
     res.json({
       success: true,
       message: "Question added successfully",
+      data: question,
+      err: {},
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Question Not added ",
+      data: [],
+      err: error.message,
+    });
+  }
+});
+
+router.post("/bulk", async (req, res) => {
+  const questionList = req.body.questionList;
+
+  try {
+    const question = await QuestionBank.insertMany(questionList);
+
+    // await QuestionBank.deleteMany({});
+    res.json({
+      success: true,
+      message: "Questions added successfully",
       data: question,
       err: {},
     });

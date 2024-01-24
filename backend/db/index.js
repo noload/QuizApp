@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
 const QuizQuestionSchema = new mongoose.Schema({
   question: String,
   options: [String],
-  correntOption: Number,
+  correctOption: Number,
 });
 
 const User = mongoose.model("Users", UserSchema);
