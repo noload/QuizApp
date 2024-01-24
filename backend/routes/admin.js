@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const router = Router();
-const { User } = require("../db/index");
+const { User, QuestionBank } = require("../db/index");
 const { validateUser, authenticateUser } = require("../middleware/validation");
+const { route } = require("./admin");
 
 router.post("/signup", validateUser, async (req, res) => {
   try {
@@ -50,6 +51,29 @@ router.post("/signin", authenticateUser, async (req, res) => {
     err: {},
     message: "Logged Successfully",
     data: {},
+  });
+});
+
+router.post("/add", async (req, res) => {
+  const questionObj = req.body;
+
+  const question = await QuestionBank.create({ ...questionObj });
+  console.log(question);
+  res.json({ data: question });
+});
+
+router.get("/questions", async (req, res) => {
+  const questionList = await QuestionBank.find();
+  res.json({
+    data: questionList,
+  });
+});
+
+router.delete("/remove:id", async (req, res) => {
+  const id = req.params.id;
+  const question = await QuestionBank.findById({ _id: id });
+  res.json({
+    data: question,
   });
 });
 
