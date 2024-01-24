@@ -1,40 +1,31 @@
 const mongoose = require("mongoose");
+const { DB_URL } = require("../config/serverConfig");
 
-mongoose.connect(
-  "mongodb+srv://notesafe:vaibhav%40123K@cluster0.fsxrugd.mongodb.net/quiz_db_dev"
-);
+mongoose.connect(DB_URL);
 
 //schema defining
 
-const AdminSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-});
-
 const UserSchema = new mongoose.Schema({
+  id: String,
   username: String,
-  password: String,
-  purchasedCourses: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
-    },
-  ],
+  password: { type: String, min: 8 },
+  role: {
+    type: String,
+    enum: ["Student", "Admin"],
+    default: "Student",
+  },
 });
 
-const CourseSchema = mongoose.Schema({
-  title: String,
-  description: String,
-  imageLink: String,
-  price: Number,
+const QuizQuestionSchema = new mongoose.Schema({
+  question: String,
+  options: [String],
+  correntOption: Number,
 });
 
-const Admin = mongoose.model("Admin", AdminSchema);
-const User = mongoose.model("User", UserSchema);
-const Course = mongoose.model("Course", CourseSchema);
+const User = mongoose.model("Users", UserSchema);
+const QuestionBank = mongoose.model("QuestionBank", QuizQuestionSchema);
 
 module.exports = {
-  Admin,
   User,
-  Course,
+  QuestionBank,
 };
