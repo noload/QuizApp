@@ -53,4 +53,23 @@ router.post("/signin", authenticateUser, async (req, res) => {
   });
 });
 
+router.get("/questions", async (req, res) => {
+  try {
+    const questionList = await QuestionBank.find();
+    res.json({
+      success: true,
+      message: "Successfully fetched all question data",
+      data: questionList,
+      err: {},
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Not able to fetch question data",
+      data: [],
+      err: error.message,
+    });
+  }
+});
+
 module.exports = router;

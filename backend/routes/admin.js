@@ -57,24 +57,63 @@ router.post("/signin", authenticateUser, async (req, res) => {
 router.post("/add", async (req, res) => {
   const questionObj = req.body;
 
-  const question = await QuestionBank.create({ ...questionObj });
-  console.log(question);
-  res.json({ data: question });
+  try {
+    const question = await QuestionBank.create({ ...questionObj });
+    console.log(question);
+    res.json({
+      success: true,
+      message: "Question added successfully",
+      data: question,
+      err: {},
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Question Not added ",
+      data: [],
+      err: error.message,
+    });
+  }
 });
 
 router.get("/questions", async (req, res) => {
-  const questionList = await QuestionBank.find();
-  res.json({
-    data: questionList,
-  });
+  try {
+    const questionList = await QuestionBank.find();
+    res.json({
+      success: true,
+      message: "Successfully fetched all question data",
+      data: questionList,
+      err: {},
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Not able to fetch question data",
+      data: [],
+      err: error.message,
+    });
+  }
 });
 
-router.delete("/remove:id", async (req, res) => {
+router.delete("/remove/:id", async (req, res) => {
   const id = req.params.id;
-  const question = await QuestionBank.findById({ _id: id });
-  res.json({
-    data: question,
-  });
+
+  try {
+    const resp = await QuestionBank.findByIdAndDelete({ _id: id });
+    res.json({
+      success: true,
+      message: `Successfully deleted the question with id ${id}`,
+      data: resp,
+      err: {},
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+      data: {},
+      err: { error },
+    });
+  }
 });
 
 module.exports = router;
