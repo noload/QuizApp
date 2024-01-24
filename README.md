@@ -1,6 +1,7 @@
 # Quiz Application
 
 ## Tech Stack Used
+
 - frontend
   - vite bundler/framework
   - react
@@ -8,10 +9,9 @@
   - redux for statemanagement
 - backend
   - express
-  
 - Database
- - mongodb
- 
+  - mongodb
+
 ## Project Setup
 
 - Clone the project on your local
